@@ -18,5 +18,5 @@ Claude Code 세션에서 명령어로 실행:
 | `history.json` | 게시 이력 (중복 방지) |
 | `examples/sujeo/` | 예시 spec + 사진 |
 
-환경 변수: `INSTAGRAM_ACCESS_TOKEN_HOWABOUTHIS`(필수), `COUPANG_ACCESS_KEY`/`COUPANG_SECRET_KEY`, `NAVER_CLIENT_ID`/`NAVER_CLIENT_SECRET`, `IG_FB_ACCESS_TOKEN`/`IG_FB_BUSINESS_ID`(선택 — 레퍼런스 계정 공식 API 수집).
+환경 변수: `INSTAGRAM_ACCESS_TOKEN_HOWABOUTHIS`(필수), `COUPANG_ACCESS_KEY`/`COUPANG_SECRET_KEY`, `NAVER_CLIENT_ID`/`NAVER_CLIENT_SECRET`(+ API HUB 키면 `NAVER_API_HUB=1`), `IG_FB_ACCESS_TOKEN`/`IG_FB_BUSINESS_ID`(선택 — 레퍼런스 계정 공식 API 수집).
 작업 파일은 `work/`(git 제외), 게시용 공개 이미지는 `howabouthis/<id>/`.

@@ -8,6 +8,7 @@
 환경 변수:
   COUPANG_ACCESS_KEY, COUPANG_SECRET_KEY   — 쿠팡 파트너스 > 추가기능 > 오픈 API
   NAVER_CLIENT_ID, NAVER_CLIENT_SECRET     — developers.naver.com 애플리케이션 (데이터랩 검색어트렌드)
+  NAVER_API_HUB=1                          — 위 키를 네이버 클라우드 API HUB에서 발급했을 때만
 """
 import datetime as dt
 import hashlib
@@ -80,10 +81,14 @@ def trend(*keywords):
     start = end - dt.timedelta(weeks=12)
     body = {"startDate": start.isoformat(), "endDate": end.isoformat(), "timeUnit": "week",
             "keywordGroups": [{"groupName": k, "keywords": [k]} for k in keywords[:5]]}
-    st, raw = http("https://openapi.naver.com/v1/datalab/search", data=json.dumps(body).encode(), method="POST",
-                   headers={"X-Naver-Client-Id": os.environ["NAVER_CLIENT_ID"],
-                            "X-Naver-Client-Secret": os.environ["NAVER_CLIENT_SECRET"],
-                            "Content-Type": "application/json"})
+    cid, secret = os.environ["NAVER_CLIENT_ID"], os.environ["NAVER_CLIENT_SECRET"]
+    if os.environ.get("NAVER_API_HUB"):   # 네이버 클라우드 API HUB에서 발급한 키
+        url = "https://naverapihub.apigw.ntruss.com/search-trend/v1/search"
+        hdr = {"X-NCP-APIGW-API-KEY-ID": cid, "X-NCP-APIGW-API-KEY": secret}
+    else:                                  # 네이버 개발자센터(developers.naver.com)에서 발급한 키
+        url = "https://openapi.naver.com/v1/datalab/search"
+        hdr = {"X-Naver-Client-Id": cid, "X-Naver-Client-Secret": secret}
+    st, raw = http(url, data=json.dumps(body).encode(), method="POST", headers={**hdr, "Content-Type": "application/json"})
     out = json.loads(raw or b"{}")
     if st != 200:
         raise SystemExit(f"네이버 데이터랩 실패 ({st}): {out}")
