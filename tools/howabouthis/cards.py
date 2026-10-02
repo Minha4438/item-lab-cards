@@ -40,7 +40,7 @@ html,body{width:1080px;height:1350px;overflow:hidden;font-family:'Pretendard','N
 .h>div{white-space:nowrap}
 .mark{display:inline-block;background:#FFE14D;color:#161616;padding:0 14px;border-radius:10px;margin-top:4px}
 .sub{margin-top:30px;font-size:36px;font-weight:500;opacity:.95}
-.page{position:absolute;right:56px;bottom:48px;color:#fff;font-size:26px;font-weight:700;opacity:.9;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.page{position:absolute;right:48px;bottom:40px;color:#fff;font-size:24px;font-weight:700;background:rgba(0,0,0,.38);padding:6px 14px;border-radius:999px}
 .handle{position:absolute;left:64px;bottom:48px;color:#fff;font-size:26px;font-weight:600;opacity:.9;text-shadow:0 1px 6px rgba(0,0,0,.4)}
 .chat{position:absolute;left:56px;right:56px;display:flex;align-items:flex-end;gap:16px}
 .chat.bottom{bottom:110px}.chat.top{top:120px}

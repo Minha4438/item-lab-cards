@@ -65,13 +65,70 @@ def ig_api(path, params=None, post=False):
     return out
 
 
-def public_profile(handle, retries=8, wait=45):
-    """공개 프로필 + 최근 12개 게시물. 인스타가 잠깐 막으면(401/429) 기다렸다 재시도."""
+TYPES = {"GraphSidecar": "캐러셀", "GraphVideo": "릴스", "GraphImage": "사진",
+         "CAROUSEL_ALBUM": "캐러셀", "VIDEO": "릴스", "IMAGE": "사진"}
+
+
+def _from_web(u):
+    posts = []
+    for e in u["edge_owner_to_timeline_media"]["edges"]:
+        n = e["node"]
+        cap = n["edge_media_to_caption"]["edges"]
+        posts.append({
+            "shortcode": n["shortcode"], "url": f"https://www.instagram.com/p/{n['shortcode']}/",
+            "type": TYPES.get(n["__typename"], n["__typename"]), "ts": n["taken_at_timestamp"],
+            "caption": cap[0]["node"]["text"] if cap else "",
+            "comments": n["edge_media_to_comment"]["count"], "likes": n["edge_liked_by"]["count"],
+            "views": n.get("video_view_count"), "image": n["display_url"],
+            "slides": len(n.get("edge_sidecar_to_children", {}).get("edges", [])) or 1,
+            "pinned": bool(n.get("pinned_for_users")),
+        })
+    return {"followers": u["edge_followed_by"]["count"], "posts": posts}
+
+
+def _from_business_discovery(handle, ig_id, token):
+    import datetime as dt
+    fields = (f"business_discovery.username({handle}){{followers_count,media.limit(24)"
+              "{caption,like_count,comments_count,timestamp,media_type,media_url,thumbnail_url,permalink,children{id}}}}")
+    st, body = http(f"https://graph.facebook.com/v21.0/{ig_id}?" + urllib.parse.urlencode({"fields": fields, "access_token": token}))
+    d = json.loads(body or b"{}")
+    if st != 200:
+        raise RuntimeError(f"business_discovery 실패 ({st}): {d.get('error', {}).get('message')}")
+    bd = d["business_discovery"]
+    posts = []
+    for m in bd.get("media", {}).get("data", []):
+        posts.append({
+            "shortcode": m["permalink"].rstrip("/").split("/")[-1], "url": m["permalink"],
+            "type": TYPES.get(m["media_type"], m["media_type"]),
+            "ts": dt.datetime.strptime(m["timestamp"], "%Y-%m-%dT%H:%M:%S%z").timestamp(),
+            "caption": m.get("caption", ""), "comments": m.get("comments_count", 0), "likes": m.get("like_count", 0),
+            "views": None, "image": m.get("thumbnail_url") or m.get("media_url"),
+            "slides": len(m.get("children", {}).get("data", [])) or 1, "pinned": False,
+        })
+    return {"followers": bd.get("followers_count"), "posts": posts}
+
+
+def public_profile(handle, retries=6, wait=60, cache_hours=6):
+    """다른 계정의 팔로워 수 + 최근 게시물(정규화). 순서: 캐시 → 공식 API(business_discovery) → 공개 웹 엔드포인트.
+
+    공식 API는 Facebook 로그인 기반 토큰이 필요: 환경 변수 IG_FB_ACCESS_TOKEN(EAA…), IG_FB_BUSINESS_ID(178…).
+    공개 웹 엔드포인트는 클라우드 IP에서 자주 429로 막힌다 — 기다렸다 재시도.
+    """
+    cache = os.path.join(WORK_DIR, "cache", f"{handle}.json")
+    if os.path.exists(cache) and time.time() - os.path.getmtime(cache) < cache_hours * 3600:
+        return load_json(cache)
+    tok, ig_id = os.environ.get("IG_FB_ACCESS_TOKEN"), os.environ.get("IG_FB_BUSINESS_ID")
+    if tok and ig_id:
+        prof = _from_business_discovery(handle, ig_id, tok)
+        save_json(cache, prof)
+        return prof
     url = f"https://www.instagram.com/api/v1/users/web_profile_info/?username={handle}"
     for i in range(retries):
         st, body = http(url, headers={"x-ig-app-id": IG_WEB_APP_ID})
         if st == 200:
-            return json.loads(body)["data"]["user"]
+            prof = _from_web(json.loads(body)["data"]["user"])
+            save_json(cache, prof)
+            return prof
         if st == 404:
             raise RuntimeError(f"@{handle} 계정을 찾을 수 없음")
         print(f"  @{handle}: {st} — {wait}s 후 재시도 ({i + 1}/{retries})", flush=True)

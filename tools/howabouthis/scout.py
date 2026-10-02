@@ -19,11 +19,6 @@ from common import TOOL_DIR, WORK_DIR, HISTORY, http, load_json, public_profile,
 KW_RE = re.compile(r"[‘'\"“’\[]\s*([^‘’'\"“”\[\]\s][^‘’'\"“”\[\]]{0,11}?)\s*[’'\"”\]]\s*(?:을|를|이라고|라고)?\s*(?:남겨|댓글|적어|써)")
 
 
-def caption_of(n):
-    e = n["edge_media_to_caption"]["edges"]
-    return e[0]["node"]["text"] if e else ""
-
-
 def cta_keyword(cap):
     m = KW_RE.search(cap)
     return m.group(1).strip() if m else None
@@ -61,44 +56,41 @@ def main():
             u = public_profile(h)
         except Exception as e:  # noqa: BLE001
             errors.append(str(e)); print("  ", e); continue
-        posts = [e["node"] for e in u["edge_owner_to_timeline_media"]["edges"]]
-        med = statistics.median([p["edge_media_to_comment"]["count"] for p in posts] or [1]) or 1
+        posts = u["posts"]
+        med = statistics.median([p["comments"] for p in posts] or [1]) or 1
         for p in posts:
-            age_d = (now - p["taken_at_timestamp"]) / 86400
-            pinned = bool(p.get("pinned_for_users"))
-            if age_d > lookback and not pinned:
+            age_d = (now - p["ts"]) / 86400
+            if age_d > lookback and not p["pinned"]:
                 continue
-            cap = caption_of(p)
+            cap = p["caption"]
             kw = cta_keyword(cap)
             if not kw:          # 제품 CTA 없는 글(뉴스·이벤트 등)은 제외
                 continue
-            cmts, likes = p["edge_media_to_comment"]["count"], p["edge_liked_by"]["count"]
-            ratio = cmts / med
-            recency = 1.0 if pinned else max(0.35, 1 - age_d / (lookback * 1.4))
+            ratio = p["comments"] / med
+            recency = max(0.35, 1 - age_d / (lookback * 1.4)) if age_d <= lookback else 0.15  # 오래된 고정글은 따로 표시
             niche_hit = [w for w in niche if w in cap]
             score = acc.get("weight", 1.0) * ratio * recency * (1.3 if niche_hit else 1.0)
-            kids = p.get("edge_sidecar_to_children", {}).get("edges", [])
             img_path = os.path.join(out_dir, "img", f"{h}_{p['shortcode']}.jpg")
-            if not os.path.exists(img_path):
-                st, body = http(p["display_url"])
+            if p.get("image") and not os.path.exists(img_path):
+                st, body = http(p["image"])
                 if st == 200:
                     open(img_path, "wb").write(body)
             cands.append({
-                "score": round(score, 2), "keyword": kw, "account": h,
-                "url": f"https://www.instagram.com/p/{p['shortcode']}/",
-                "type": {"GraphSidecar": "캐러셀", "GraphVideo": "릴스", "GraphImage": "사진"}.get(p["__typename"], p["__typename"]),
-                "slides": len(kids) or 1, "comments": cmts, "likes": likes,
-                "views": p.get("video_view_count"), "x_median": round(ratio, 1),
-                "age_days": round(age_d, 1), "pinned": pinned, "niche": niche_hit,
+                "score": round(score, 2), "keyword": kw, "account": h, "url": p["url"], "type": p["type"],
+                "slides": p["slides"], "comments": p["comments"], "likes": p["likes"], "views": p["views"],
+                "x_median": round(ratio, 1), "age_days": round(age_d, 1), "pinned": p["pinned"], "niche": niche_hit,
                 "already_posted": kw in posted or any(kw in pp for pp in posted_products),
                 "summary": summary_lines(cap), "caption": cap, "cover": img_path,
             })
         print(f"  게시물 {len(posts)}개, 평소 댓글 중앙값 {med}", flush=True)
 
     cands.sort(key=lambda c: -c["score"])
-    save_json(os.path.join(out_dir, "candidates.json"), {"date": today, "errors": errors, "candidates": cands})
+    
 
+    steady = [c for c in cands if c["age_days"] > lookback]
+    cands = [c for c in cands if c["age_days"] <= lookback]
     top = cands[: args.top]
+    save_json(os.path.join(out_dir, "candidates.json"), {"date": today, "errors": errors, "candidates": cands, "steady": steady})
     try:
         from PIL import Image, ImageDraw
         w, hgt = 270, 338
@@ -122,6 +114,10 @@ def main():
         flag = " ⚠️이미 올림" if c["already_posted"] else (" 📌고정" if c["pinned"] else "")
         print(f"| {i} | {c['score']} | {c['keyword']}{flag} | @{c['account']} | {c['type']} | "
               f"{c['comments']} (×{c['x_median']}) | {c['age_days']} | {','.join(c['niche']) or '-'} | {c['summary'][:70]} |")
+    if steady:
+        print("\n📌 오래됐지만 고정해둔 스테디셀러 (검증된 아이템):")
+        for c in steady:
+            print(f"- {c['keyword']} @{c['account']} 댓글 {c['comments']} (평소×{c['x_median']}, {int(c['age_days'])}일 전) — {c['summary'][:60]}")
     if errors:
         print("\n수집 실패:", *errors, sep="\n- ")
 
