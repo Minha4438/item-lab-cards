@@ -9,7 +9,7 @@
 - **해시태그 검색 (ig_hashtag_search)**: 7일 동안 고유 해시태그 30개 한도. 2026-10-02에 10개 사용
   (꿀템추천·살림템·신박템·뷰티템·패션템·자취템·다이소꿀템·올리브영추천·쿠팡꿀템·꿀템). 10/9부터 다시 여유.
 - **게시물 작성자 확인**: Graph API oEmbed는 권한이 없어 막힘. 공개 엔드포인트 `https://www.instagram.com/api/v1/oembed/?url=<게시물 URL>` (헤더 `x-ig-app-id`)로 `author_name`을 얻을 수 있음.
-- 쿠팡 파트너스 키 없음 → `market.py coupang/best/goldbox`는 안 됨. 네이버 데이터랩(`market.py trend`)은 됨.
+- 쿠팡 파트너스 키 없음 → `market.py coupang/best/goldbox`는 안 됨. 쿠팡 상품 페이지도 접속 불가 → 사용자가 직접 찾으므로 후보마다 검색어·고르는 기준을 준다(find-items). 네이버 데이터랩(`market.py trend`)은 됨.
 
 ## 계정 방향
 - @how.abouthis 니치: 살림·주방·인테리어 + **뷰티·패션** (2026-10-03부터 포함).
