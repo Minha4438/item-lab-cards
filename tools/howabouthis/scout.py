@@ -3,7 +3,7 @@
   python3 tools/howabouthis/scout.py            # refs.json의 계정 전부
   python3 tools/howabouthis/scout.py --top 15
 
-점수 = 그 계정 평소 댓글 수(중앙값) 대비 몇 배인지(키워드 댓글 = 구매 관심) × 최신성 × 니치 가중치.
+점수 = 그 계정 평소 댓글 수(중앙값) 대비 몇 배인지(키워드 댓글 = 구매 관심) × 최신성 × 니치 가중치(주력 1.3 / 보조 1.1).
 결과: work/scout/<날짜>/candidates.json, 표지 이미지(img/), 한눈에 보기(sheet.jpg)
 """
 import argparse
@@ -47,7 +47,8 @@ def main():
 
     cfg = load_json(os.path.join(TOOL_DIR, "refs.json"))
     accounts = [{"handle": h, "weight": 1.0} for h in args.accounts] if args.accounts else cfg["accounts"]
-    niche = cfg.get("niche_keywords", [])
+    niche = cfg.get("niche_keywords", [])            # 주력 분야 (×1.3)
+    sub = cfg.get("secondary_keywords", [])          # 보조 분야 (×1.1)
     lookback = cfg.get("lookback_days", 21)
     posted = {(h.get("keyword") or "").strip() for h in load_json(HISTORY, [])} - {""}
     posted_products = [h.get("product", "") for h in load_json(HISTORY, [])]
@@ -78,7 +79,8 @@ def main():
             ratio = p["comments"] / med
             recency = max(0.35, 1 - age_d / (lookback * 1.4)) if age_d <= lookback else 0.15  # 오래된 고정글은 따로 표시
             niche_hit = [w for w in niche if w in cap]
-            score = acc.get("weight", 1.0) * ratio * recency * (1.3 if niche_hit else 1.0)
+            sub_hit = [w for w in sub if w in cap]
+            score = acc.get("weight", 1.0) * ratio * recency * (1.3 if niche_hit else 1.1 if sub_hit else 1.0)
             img_path = os.path.join(out_dir, "img", f"{h}_{p['shortcode']}.jpg")
             if p.get("image") and not os.path.exists(img_path):
                 st, body = http(p["image"])
@@ -87,7 +89,7 @@ def main():
             cands.append({
                 "score": round(score, 2), "keyword": kw, "account": h, "url": p["url"], "type": p["type"],
                 "slides": p["slides"], "comments": p["comments"], "likes": p["likes"], "views": p["views"],
-                "x_median": round(ratio, 1), "age_days": round(age_d, 1), "pinned": p["pinned"], "niche": niche_hit,
+                "x_median": round(ratio, 1), "age_days": round(age_d, 1), "pinned": p["pinned"], "niche": niche_hit or sub_hit,
                 "already_posted": kw in posted or any(kw in pp for pp in posted_products),
                 "summary": summary_lines(cap), "caption": cap, "cover": img_path,
             })
