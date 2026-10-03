@@ -19,9 +19,18 @@ from common import TOOL_DIR, WORK_DIR, HISTORY, http, load_json, public_profile,
 KW_RE = re.compile(r"[‘'\"“’\[]\s*([^‘’'\"“”\[\]\s][^‘’'\"“”\[\]]{0,11}?)\s*[’'\"”\]]\s*(?:을|를|이라고|라고)?\s*(?:남겨|댓글|적어|써)")
 
 
+GONGGU_RE = re.compile(r"[\[🧡]\s*([^\]\n]{2,30}?)\s*\]?\s*공구\s*(?:예고|오픈|OPEN)")
+
+
 def cta_keyword(cap):
     m = KW_RE.search(cap)
     return m.group(1).strip() if m else None
+
+
+def gonggu_name(cap):
+    """공구 계정의 '[제품명] 공구예고' 글 — 키워드 CTA는 없지만 오픈 전 수요 신호라 후보로 본다."""
+    m = GONGGU_RE.search(cap)
+    return f"공구:{m.group(1).strip()}" if m else None
 
 
 def summary_lines(cap, k=3):
@@ -63,7 +72,7 @@ def main():
             if age_d > lookback and not p["pinned"]:
                 continue
             cap = p["caption"]
-            kw = cta_keyword(cap)
+            kw = cta_keyword(cap) or gonggu_name(cap)
             if not kw:          # 제품 CTA 없는 글(뉴스·이벤트 등)은 제외
                 continue
             ratio = p["comments"] / med

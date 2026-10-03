@@ -2,7 +2,7 @@
 
   python3 market.py coupang "물빠짐 수저통"          # 상품 검색: 가격·로켓·평점·파트너스 링크·이미지
   python3 market.py goldbox                          # 쿠팡 골드박스(오늘의 특가)
-  python3 market.py best 1015                        # 카테고리 베스트 (1015=홈인테리어, 1013=주방용품, 1014=생활용품)
+  python3 market.py best 1015                        # 카테고리 베스트 (1015=홈인테리어, 1013=주방용품, 1014=생활용품, 1010=뷰티, 1001=여성패션)
   python3 market.py trend "수저통" "식기건조대"       # 네이버 검색량 추이(최근 12주, 상대값)
 
 환경 변수:
