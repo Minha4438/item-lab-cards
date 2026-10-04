@@ -6,7 +6,7 @@ const jobs = JSON.parse(process.argv[2]);
   const b = await playwright.chromium.launch();
   const p = await b.newPage({ viewport: { width: 1080, height: 1350 } });
   for (const [html, out] of jobs) {
-    await p.goto('file://' + html);
+    await p.goto(require('url').pathToFileURL(html).href);  // 윈도우 경로(C:\\...)도 처리
     await p.waitForFunction(() => document.body.dataset.ready === '1', null, { timeout: 15000 });
     await p.screenshot({ path: out });
   }
