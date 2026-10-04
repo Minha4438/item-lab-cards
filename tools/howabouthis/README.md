@@ -35,7 +35,7 @@ npx playwright install chromium
 ```
 
 - 폰트: [Pretendard](https://github.com/orioncactus/pretendard/releases) zip을 받아 `public/static/*.otf`를 모두 선택 → 우클릭 → **모든 사용자용으로 설치**.
-- API 키: 사용자 환경 변수로 등록 (`setx 이름 "값"` 후 터미널 다시 열기). 키는 저장소에 커밋하지 않는다.
-  `INSTAGRAM_ACCESS_TOKEN_HOWABOUTHIS`, `IG_FB_ACCESS_TOKEN`, `IG_FB_BUSINESS_ID`, `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`, `NAVER_API_HUB`
-  (나중에 `GEMINI_API_KEY`, `COUPANG_ACCESS_KEY`, `COUPANG_SECRET_KEY`)
+- API 키: 저장소 루트의 `.env.example`을 복사해 이름을 `.env`로 바꾸고, 메모장으로 열어 `=` 뒤에 값을 붙여 넣으면 끝.
+  모든 스크립트가 `common.py`에서 자동으로 읽는다. `.env`는 gitignore라 커밋되지 않는다.
+  (환경 변수로 이미 설정된 값이 있으면 그쪽이 우선.)
 - `work/`(스캔 캐시·작업 이미지)는 git에 없으므로 로컬에서 새로 만들어진다.

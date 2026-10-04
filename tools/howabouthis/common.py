@@ -13,6 +13,25 @@ WORK_DIR = os.path.join(REPO_DIR, "work")            # gitignore — 세션 임�
 CARDS_DIR = os.path.join(REPO_DIR, "howabouthis")    # 공개 이미지 (Instagram이 여기서 가져감)
 HISTORY = os.path.join(TOOL_DIR, "history.json")     # 게시 이력
 
+
+def _load_dotenv(path=os.path.join(REPO_DIR, ".env")):
+    """저장소 루트의 .env(gitignore)에서 API 키를 읽는다. 이미 설정된 환경 변수가 우선.
+    한 줄에 하나씩 `이름=값`. #으로 시작하면 주석. 메모장 저장(BOM)도 처리."""
+    if not os.path.exists(path):
+        return
+    with open(path, encoding="utf-8-sig") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            k, v = line.split("=", 1)
+            k, v = k.strip(), v.strip().strip('"').strip("'")
+            if k and v:
+                os.environ.setdefault(k, v)
+
+
+_load_dotenv()
+
 IG_GRAPH = "https://graph.instagram.com/v21.0"
 IG_WEB_APP_ID = "936619743392459"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
