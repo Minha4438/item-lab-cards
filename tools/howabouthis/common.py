@@ -89,7 +89,7 @@ def _from_web(u):
 def _from_business_discovery(handle, ig_id, token):
     import datetime as dt
     fields = (f"business_discovery.username({handle}){{followers_count,media.limit(24)"
-              "{caption,like_count,comments_count,timestamp,media_type,media_url,thumbnail_url,permalink,children{id}}}}")
+              "{caption,like_count,comments_count,timestamp,media_type,media_url,thumbnail_url,permalink,children{id}}}")
     st, body = http(f"https://graph.facebook.com/v21.0/{ig_id}?" + urllib.parse.urlencode({"fields": fields, "access_token": token}))
     d = json.loads(body or b"{}")
     if st != 200:

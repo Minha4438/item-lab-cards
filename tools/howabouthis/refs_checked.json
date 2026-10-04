@@ -1,0 +1,556 @@
+{
+ "_comment": "레퍼런스 후보 검증 기록 (business_discovery 최근 24개 게시물 기준). 여기 있는 계정은 다시 조회하지 말 것. pending은 API 한도로 못 본 계정.",
+ "checked_at": "2026-10-02",
+ "source": "해시태그 10개(꿀템추천·살림템·신박템·뷰티템·패션템·자취템·다이소꿀템·올리브영추천·쿠팡꿀템·꿀템) 인기·최근 게시물 작성자",
+ "accounts": [
+  {
+   "handle": "fashionandstyle.official",
+   "followers": 877267,
+   "median_comments": 3.5,
+   "cta_share": 0.0,
+   "posts_per_week": 123.1,
+   "status": "rejected",
+   "note": "패션 뉴스 매체, 제품 CTA 없음"
+  },
+  {
+   "handle": "foryou_home87",
+   "followers": 644444,
+   "median_comments": 13.0,
+   "cta_share": 0.0,
+   "posts_per_week": 44.9,
+   "status": "rejected",
+   "note": "mama__home_ 계열 공구, 중복이라 제외"
+  },
+  {
+   "handle": "mama__home_",
+   "followers": 614830,
+   "median_comments": 6.5,
+   "cta_share": 0.08,
+   "posts_per_week": 45.4,
+   "status": "added",
+   "note": ""
+  },
+  {
+   "handle": "awesometable7",
+   "followers": 604851,
+   "median_comments": 114.5,
+   "cta_share": 0.17,
+   "posts_per_week": 7.7,
+   "status": "added",
+   "note": ""
+  },
+  {
+   "handle": "mari__ettle",
+   "followers": 591278,
+   "median_comments": 13.0,
+   "cta_share": 0.0,
+   "posts_per_week": 45.4,
+   "status": "added",
+   "note": ""
+  },
+  {
+   "handle": "rara__home_",
+   "followers": 491381,
+   "median_comments": 13.0,
+   "cta_share": 0.0,
+   "posts_per_week": 45.4,
+   "status": "rejected",
+   "note": "mama__home_ 계열 공구, 중복이라 제외"
+  },
+  {
+   "handle": "m1_ae_",
+   "followers": 324586,
+   "median_comments": 21.0,
+   "cta_share": 0.0,
+   "posts_per_week": 4.9,
+   "status": "rejected",
+   "note": "공구 이벤트 위주"
+  },
+  {
+   "handle": "genie__house__",
+   "followers": 298318,
+   "median_comments": 6.5,
+   "cta_share": 0.04,
+   "posts_per_week": 47.5,
+   "status": "added",
+   "note": ""
+  },
+  {
+   "handle": "rose_tan2",
+   "followers": 238025,
+   "median_comments": 51.0,
+   "cta_share": 0.0,
+   "posts_per_week": 9.7,
+   "status": "rejected",
+   "note": "먹방·일상"
+  },
+  {
+   "handle": "cooaka__",
+   "followers": 211546,
+   "median_comments": 92.5,
+   "cta_share": 0.0,
+   "posts_per_week": 7.7,
+   "status": "rejected",
+   "note": "주방 공구지만 식품 비중 큼"
+  },
+  {
+   "handle": "petit_soo",
+   "followers": 191746,
+   "median_comments": 128.5,
+   "cta_share": 0.08,
+   "posts_per_week": 1.8,
+   "status": "rejected",
+   "note": "육아 광고 위주, 업로드 적음"
+  },
+  {
+   "handle": "stylelistoday",
+   "followers": 190587,
+   "median_comments": 32.0,
+   "cta_share": 0.0,
+   "posts_per_week": 7.2,
+   "status": "rejected",
+   "note": "패션 브랜드 광고만"
+  },
+  {
+   "handle": "hyemida__a",
+   "followers": 163860,
+   "median_comments": 37.5,
+   "cta_share": 0.0,
+   "posts_per_week": 19.7,
+   "status": "rejected",
+   "note": "광고 위주, 반응 낮음"
+  },
+  {
+   "handle": "lovegenie_house",
+   "followers": 80949,
+   "median_comments": 151.5,
+   "cta_share": 0.0,
+   "posts_per_week": 15.6,
+   "status": "rejected",
+   "note": "맛집 위주"
+  },
+  {
+   "handle": "nini_salim00",
+   "followers": 65487,
+   "median_comments": 599.0,
+   "cta_share": 0.0,
+   "posts_per_week": 7.2,
+   "status": "added",
+   "note": ""
+  },
+  {
+   "handle": "frommoi",
+   "followers": 64159,
+   "median_comments": 24.5,
+   "cta_share": 0.08,
+   "posts_per_week": 12.6,
+   "status": "added",
+   "note": ""
+  },
+  {
+   "handle": "hometem_tip",
+   "followers": 54781,
+   "median_comments": 31.0,
+   "cta_share": 0.0,
+   "posts_per_week": 7.4,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "kim___hihi__7878",
+   "followers": 42688,
+   "median_comments": 3.0,
+   "cta_share": 0.0,
+   "posts_per_week": 10.3,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "honeyhometip",
+   "followers": 40109,
+   "median_comments": 6.0,
+   "cta_share": 0.33,
+   "posts_per_week": 7.2,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "arume_home",
+   "followers": 33431,
+   "median_comments": 186.0,
+   "cta_share": 0.54,
+   "posts_per_week": 22.9,
+   "status": "added",
+   "note": ""
+  },
+  {
+   "handle": "korean_window",
+   "followers": 29056,
+   "median_comments": 2.0,
+   "cta_share": 0.08,
+   "posts_per_week": 0.9,
+   "status": "rejected",
+   "note": "국어 콘텐츠"
+  },
+  {
+   "handle": "need._.yuna",
+   "followers": 25819,
+   "median_comments": 46.5,
+   "cta_share": 0.04,
+   "posts_per_week": 5.1,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "dailybeauty_wellness",
+   "followers": 25079,
+   "median_comments": 10.5,
+   "cta_share": 0.0,
+   "posts_per_week": 22.6,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "k_beauty_items",
+   "followers": 22026,
+   "median_comments": 26.5,
+   "cta_share": 0.88,
+   "posts_per_week": 1.5,
+   "status": "added",
+   "note": ""
+  },
+  {
+   "handle": "milchak.tem",
+   "followers": 20622,
+   "median_comments": 433.5,
+   "cta_share": 1.0,
+   "posts_per_week": 12.6,
+   "status": "added",
+   "note": ""
+  },
+  {
+   "handle": "0gooditem0",
+   "followers": 16688,
+   "median_comments": 173.0,
+   "cta_share": 0.0,
+   "posts_per_week": 1.8,
+   "status": "added",
+   "note": ""
+  },
+  {
+   "handle": "jini__jini__",
+   "followers": 16375,
+   "median_comments": 33.0,
+   "cta_share": 0.0,
+   "posts_per_week": 5.5,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "seosom_diary",
+   "followers": 15863,
+   "median_comments": 27.5,
+   "cta_share": 0.04,
+   "posts_per_week": 2.0,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "damy.home",
+   "followers": 15532,
+   "median_comments": 26.0,
+   "cta_share": 0.0,
+   "posts_per_week": 4.5,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "letty_station",
+   "followers": 13205,
+   "median_comments": 24.5,
+   "cta_share": 0.0,
+   "posts_per_week": 1.0,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "fran._.hy",
+   "followers": 13024,
+   "median_comments": 119.5,
+   "cta_share": 0.0,
+   "posts_per_week": 3.4,
+   "status": "rejected",
+   "note": "협찬 위주"
+  },
+  {
+   "handle": "jj__kh0103",
+   "followers": 12271,
+   "median_comments": 93.5,
+   "cta_share": 0.0,
+   "posts_per_week": 3.2,
+   "status": "rejected",
+   "note": "육아 협찬 위주"
+  },
+  {
+   "handle": "souing_muk",
+   "followers": 11754,
+   "median_comments": 16.0,
+   "cta_share": 0.0,
+   "posts_per_week": 10.8,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "samisae_youngji",
+   "followers": 11323,
+   "median_comments": 6.5,
+   "cta_share": 0.0,
+   "posts_per_week": 33.4,
+   "status": "rejected",
+   "note": "개인 판매 계정"
+  },
+  {
+   "handle": "hyeppy.room",
+   "followers": 10723,
+   "median_comments": 100.0,
+   "cta_share": 0.33,
+   "posts_per_week": 5.0,
+   "status": "added",
+   "note": ""
+  },
+  {
+   "handle": "roro._.vely",
+   "followers": 10560,
+   "median_comments": 40.5,
+   "cta_share": 0.0,
+   "posts_per_week": 4.6,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "rada__home",
+   "followers": 8848,
+   "median_comments": 48.0,
+   "cta_share": 0.17,
+   "posts_per_week": 2.3,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "heydayz__",
+   "followers": 8323,
+   "median_comments": 85.0,
+   "cta_share": 0.0,
+   "posts_per_week": 1.5,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "dalpeurun",
+   "followers": 7988,
+   "median_comments": 21.0,
+   "cta_share": 0.04,
+   "posts_per_week": 7.9,
+   "status": "added",
+   "note": ""
+  },
+  {
+   "handle": "ayun_0108_",
+   "followers": 7842,
+   "median_comments": 123.5,
+   "cta_share": 0.0,
+   "posts_per_week": 5.4,
+   "status": "rejected",
+   "note": "협찬 위주"
+  },
+  {
+   "handle": "eerop_life",
+   "followers": 7516,
+   "median_comments": 2.0,
+   "cta_share": 0.04,
+   "posts_per_week": 1.0,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "ziaf00d",
+   "followers": 5663,
+   "median_comments": 71.5,
+   "cta_share": 0.0,
+   "posts_per_week": 5.3,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "smileful_it",
+   "followers": 5592,
+   "median_comments": 170.0,
+   "cta_share": 1.0,
+   "posts_per_week": 6.4,
+   "status": "added",
+   "note": ""
+  },
+  {
+   "handle": "yoondori_house",
+   "followers": 5559,
+   "median_comments": 36.5,
+   "cta_share": 0.0,
+   "posts_per_week": 4.4,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "home_up__",
+   "followers": 5344,
+   "median_comments": 29.5,
+   "cta_share": 1.0,
+   "posts_per_week": 1.3,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "_iamkk0mi",
+   "followers": 4706,
+   "median_comments": 1.0,
+   "cta_share": 0.0,
+   "posts_per_week": 12.0,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "kkom_do",
+   "followers": 3687,
+   "median_comments": 50.5,
+   "cta_share": 0.0,
+   "posts_per_week": 4.9,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "yuui.zip",
+   "followers": 3242,
+   "median_comments": 17.0,
+   "cta_share": 0.08,
+   "posts_per_week": 7.9,
+   "status": "rejected",
+   "note": "아기 릴스(1회성 바이럴)"
+  },
+  {
+   "handle": "yodul.k",
+   "followers": 2763,
+   "median_comments": 61.0,
+   "cta_share": 0.0,
+   "posts_per_week": 2.9,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "salim_bogo",
+   "followers": 1558,
+   "median_comments": 59.0,
+   "cta_share": 0.0,
+   "posts_per_week": 7.1,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "ari_home_oo",
+   "followers": 1532,
+   "median_comments": 6.5,
+   "cta_share": 0.96,
+   "posts_per_week": 3.9,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "myo_cosmetic",
+   "followers": 1170,
+   "median_comments": 81.0,
+   "cta_share": 0.0,
+   "posts_per_week": 3.0,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "beautygonglyong",
+   "followers": 1121,
+   "median_comments": 47.0,
+   "cta_share": 0.0,
+   "posts_per_week": 5.3,
+   "status": "rejected",
+   "note": "반응·CTA 약함"
+  },
+  {
+   "handle": "whipping.cr",
+   "followers": 953,
+   "median_comments": 50,
+   "cta_share": 0.0,
+   "posts_per_week": 3.1,
+   "status": "rejected",
+   "note": "팔로워 1천 미만"
+  },
+  {
+   "handle": "j_honeyhouse",
+   "followers": 78,
+   "median_comments": 11.0,
+   "cta_share": 0.92,
+   "posts_per_week": 8.6,
+   "status": "rejected",
+   "note": "팔로워 1천 미만"
+  },
+  {
+   "handle": "bodaamhouse",
+   "followers": 56,
+   "median_comments": 1.0,
+   "cta_share": 0.62,
+   "posts_per_week": 6.4,
+   "status": "rejected",
+   "note": "팔로워 1천 미만"
+  },
+  {
+   "handle": "qoodung_tem",
+   "followers": 24,
+   "median_comments": 1,
+   "cta_share": 0.95,
+   "posts_per_week": 50.6,
+   "status": "rejected",
+   "note": "팔로워 1천 미만"
+  },
+  {
+   "handle": "jangbi_house",
+   "followers": 7,
+   "median_comments": 7,
+   "cta_share": 1.0,
+   "posts_per_week": 4.0,
+   "status": "rejected",
+   "note": "팔로워 1천 미만"
+  },
+  {
+   "handle": "selppick._.1",
+   "followers": 4,
+   "median_comments": 1,
+   "cta_share": 1.0,
+   "posts_per_week": 13.9,
+   "status": "rejected",
+   "note": "팔로워 1천 미만"
+  },
+  {
+   "handle": "jip.kkul",
+   "followers": 3,
+   "median_comments": 3,
+   "cta_share": 1.0,
+   "posts_per_week": 41.0,
+   "status": "rejected",
+   "note": "팔로워 1천 미만"
+  }
+ ],
+ "pending": [
+  "makeviviju",
+  "rimi_channel",
+  "bbang.morning",
+  "livelong_food",
+  "finders.kr",
+  "_trend_kr",
+  "un_ni_tip"
+ ]
+}

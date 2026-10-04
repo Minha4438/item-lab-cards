@@ -1,11 +1,11 @@
 ---
 name: post-cards
-description: make-cards로 만들고 사용자가 승인한 카드뉴스를 @how.abouthis 인스타그램에 캐러셀로 게시한다. "올려", "게시해", /post-cards 에 사용. 사용자가 이 대화에서 해당 카드의 게시를 명시적으로 승인한 경우에만 실행.
+description: make-cards로 만들고 사용자가 승인한 카드뉴스를 @how.abouthis 인스타그램에 캐러셀 또는 슬라이드 릴스로 게시한다. "올려", "게시해", /post-cards 에 사용. 사용자가 이 대화에서 해당 카드의 게시를 명시적으로 승인한 경우에만 실행.
 ---
 
 # 게시하기 (/post-cards)
 
-인자: 카드 id (생략 시 이 대화에서 마지막으로 만든 카드).
+인자: 카드 id (생략 시 이 대화에서 마지막으로 만든 카드), (선택) `릴스`/`캐러셀` — 없으면 spec.json의 `format` (없으면 캐러셀).
 
 ## 규칙
 - **이 대화에서 사용자가 그 카드(미리보기)를 보고 게시를 승인했을 때만** 실제 게시한다. 승인이 없거나 애매하면 미리보기와 캡션을 다시 보여주고 확인을 받는다.
@@ -13,8 +13,10 @@ description: make-cards로 만들고 사용자가 승인한 카드뉴스를 @how
 
 ## 실행
 1. `work/cards/<id>/out/*.jpg`와 `spec.json`이 있는지 확인. 없으면 make-cards부터.
-2. `python3 tools/howabouthis/post.py work/cards/<id>/spec.json --yes`
+2. 캐러셀: `python3 tools/howabouthis/post.py work/cards/<id>/spec.json --yes`
    - 이미지를 `howabouthis/<id>/`로 커밋·푸시 → 공개 주소 확인 → 인스타 캐러셀 게시 → `history.json` 기록·푸시.
+   릴스: `python3 tools/howabouthis/post.py work/cards/<id>/spec.json --reel --yes` (`reel.mp4` 필요 — 없으면 `reel.py`부터)
+   - `reel.mp4`를 `howabouthis/<id>/`로 커밋·푸시 → video_url로 릴스 컨테이너 → 처리 대기(최대 5분) → 게시 → 기록(`format: reel`).
    - 테스트만 할 때는 `--dry-run` (게시 직전까지, 컨테이너는 24시간 후 자동 만료).
 3. 결과 보고: 게시물 링크(permalink) + 사용자가 할 일:
    - 자동 DM 도구에 키워드 `'<keyword>'` 등록 (아직 자동화 안 됨)

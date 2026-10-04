@@ -1,11 +1,16 @@
 ---
 name: make-cards
-description: 고른 제품으로 이거 어때?(@how.abouthis) 시안 A(톡 버블) 스타일 카드뉴스(1080x1350 캐러셀)와 캡션을 만들고 미리보기를 보여준다. "카드뉴스 만들어줘", "N번으로 만들어", /make-cards 에 사용. 승인되면 post-cards 로 이어진다.
+description: 고른 제품으로 이거 어때?(@how.abouthis) 시안 A(톡 버블) 스타일 카드뉴스(1080x1350 캐러셀)·슬라이드 릴스와 캡션을 만들고 미리보기를 보여준다. "카드뉴스 만들어줘", "N번으로 만들어", /make-cards 에 사용. 승인되면 post-cards 로 이어진다.
 ---
 
 # 카드뉴스 만들기 (/make-cards)
 
-인자: 제품명 또는 find-items 후보 번호, (선택) 사진/영상 URL·릴스 shortcode.
+인자: 제품명 또는 find-items 후보 번호, (선택) 사진/영상 URL·릴스 shortcode, (선택) 형식 `릴스` / `캐러셀`.
+
+**형식 정하기** (spec.json의 `"format": "carousel" | "reel"`):
+- 인자에 `릴스`/`캐러셀`이 있으면 그대로.
+- 없으면 A/B 테스트 중이므로 `tools/howabouthis/history.json`의 마지막 게시 형식과 **반대**로 제안한다 (기록 없으면 릴스). 사용자가 바꾸면 따른다.
+- 테스트 비교: 게시 48시간 후 비팔로워 도달·공유·저장·팔로우 (CLAUDE.md 참고).
 
 ## 0. 준비
 `bash tools/howabouthis/setup.sh` (폰트·Pillow). 작업 폴더: `work/cards/<id>/` — `id` = `YYYY-MM-DD-<영문슬러그>` (예: `2026-10-05-dish-rack`).
@@ -34,8 +39,14 @@ description: 고른 제품으로 이거 어때?(@how.abouthis) 시안 A(톡 버�
   - 사진이 너무 흐리거나 어두우면 교체
 - 문제 있으면 고쳐서 다시 렌더.
 
+## 3-2. 릴스 (format이 reel일 때)
+`python3 tools/howabouthis/reel.py work/cards/<id>/spec.json` → `reel.mp4`(1080x1920, 표지 3초·본문 2.5초·크로스페이드), `reel_preview.jpg`
+- `reel_preview.jpg`를 Read로 확인: 카드가 화면 위쪽에 있고 아래 440px는 비어 있어야 함(릴스 하단 UI 영역).
+- 배경은 각 장의 원본 사진을 흐리게 깐 것 — spec의 이미지 순서(표지, 본문, CTA)가 out/NN.jpg와 같아야 한다.
+- 음원은 저작권 없는 파일만 `--audio`로. 인스타 음악은 API로 못 붙임 → 필요하면 게시 후 앱에서 추가하도록 안내.
+
 ## 4. 사용자 검토
-- SendUserFile로 `preview.jpg` (+ 표지 원본) 전송.
+- SendUserFile로 `preview.jpg` (+ 표지 원본) 전송. 릴스면 `reel.mp4`와 `reel_preview.jpg`도.
 - 캡션 전문을 채팅에 보여준다.
 - "이대로 올릴까요? 고칠 곳 있으면 말씀해주세요"라고 묻고 **멈춘다**. 수정 요청은 반영해서 다시 미리보기.
 - 승인("올려", "게시해" 등)이 오면 `post-cards` 스킬로 진행.
