@@ -21,3 +21,21 @@ Claude Code 세션에서 명령어로 실행:
 
 환경 변수: `INSTAGRAM_ACCESS_TOKEN_HOWABOUTHIS`(필수), `COUPANG_ACCESS_KEY`/`COUPANG_SECRET_KEY`, `NAVER_CLIENT_ID`/`NAVER_CLIENT_SECRET`(+ API HUB 키면 `NAVER_API_HUB=1`), `IG_FB_ACCESS_TOKEN`/`IG_FB_BUSINESS_ID`(선택 — 레퍼런스 계정 공식 API 수집).
 작업 파일은 `work/`(git 제외), 게시용 공개 이미지는 `howabouthis/<id>/`.
+
+## 윈도우(로컬)에서 실행
+
+`setup.sh`는 리눅스용이라 윈도우에서는 아래를 한 번 실행한다 (PowerShell).
+
+```powershell
+winget install Git.Git Python.Python.3.12 OpenJS.NodeJS.LTS Gyan.FFmpeg
+# 터미널을 새로 연 뒤, 저장소 폴더에서
+pip install pillow
+npm install playwright
+npx playwright install chromium
+```
+
+- 폰트: [Pretendard](https://github.com/orioncactus/pretendard/releases) zip을 받아 `public/static/*.otf`를 모두 선택 → 우클릭 → **모든 사용자용으로 설치**.
+- API 키: 사용자 환경 변수로 등록 (`setx 이름 "값"` 후 터미널 다시 열기). 키는 저장소에 커밋하지 않는다.
+  `INSTAGRAM_ACCESS_TOKEN_HOWABOUTHIS`, `IG_FB_ACCESS_TOKEN`, `IG_FB_BUSINESS_ID`, `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`, `NAVER_API_HUB`
+  (나중에 `GEMINI_API_KEY`, `COUPANG_ACCESS_KEY`, `COUPANG_SECRET_KEY`)
+- `work/`(스캔 캐시·작업 이미지)는 git에 없으므로 로컬에서 새로 만들어진다.

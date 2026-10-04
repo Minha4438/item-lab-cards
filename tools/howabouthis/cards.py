@@ -9,6 +9,7 @@ spec 형식은 examples/sujeo/spec.json 참고. 이미지 경로는 spec 파일 
 import html
 import json
 import os
+import pathlib
 import subprocess
 import sys
 
@@ -87,7 +88,7 @@ def bg(img, base):
         raise SystemExit(f"이미지 없음: {src}")
     pos = img.get("pos", "center")
     size = f"{int(img['zoom'] * 100)}% auto" if img.get("zoom") else "cover"
-    return f'<div class="bg" style="background-image:url(\'file://{src}\');background-position:{pos};background-size:{size}"></div>'
+    return f'<div class="bg" style="background-image:url(\'{pathlib.Path(src).as_uri()}\');background-position:{pos};background-size:{size}"></div>'
 
 
 def page(body):
