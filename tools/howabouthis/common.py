@@ -15,19 +15,18 @@ HISTORY = os.path.join(TOOL_DIR, "history.json")     # 게시 이력
 
 
 def _load_dotenv(path=os.path.join(REPO_DIR, ".env")):
-    """저장소 루트 .env(gitignore)의 키를 환경 변수로. 이미 설정된 환경 변수가 우선, 빈 값은 무시."""
-    try:
-        f = open(path, encoding="utf-8-sig")
-    except FileNotFoundError:
+    """저장소 루트의 .env(gitignore)에서 API 키를 읽는다. 이미 설정된 환경 변수가 우선.
+    한 줄에 하나씩 `이름=값`. #으로 시작하면 주석. 메모장 저장(BOM)도 처리."""
+    if not os.path.exists(path):
         return
-    with f:
+    with open(path, encoding="utf-8-sig") as f:
         for line in f:
             line = line.strip()
             if not line or line.startswith("#") or "=" not in line:
                 continue
             k, v = line.split("=", 1)
-            k, v = k.strip().removeprefix("export ").strip(), v.strip().strip("\"'")
-            if v:
+            k, v = k.strip(), v.strip().strip('"').strip("'")
+            if k and v:
                 os.environ.setdefault(k, v)
 
 
