@@ -1,4 +1,5 @@
-"""스레드 장기 토큰 갱신 → GitHub Secret 교체. threads-token-refresh.yml이 매월 1·15일에 돌린다.
+"""스레드·인스타 장기 토큰 갱신 → GitHub Secret 교체. threads-token-refresh.yml이 매월 1·15일에 돌린다.
+(인스타는 인스타 로그인 토큰 HOWABOUTHIS_IG_TOKEN — ig_refresh_token. 페이스북 로그인 토큰 EAA…는 이 방식으로 갱신 안 됨)
 
 장기 토큰은 60일 유효. 발급 후 24시간이 지나야 갱신 가능하고, 갱신하면 다시 60일.
 - Secret 값을 환경 변수로 받아 갱신하고, 새 값은 gh secret set 으로 바로 저장 (화면에 출력하지 않음)
@@ -12,14 +13,20 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-SECRETS = ("ITEMLAB_THREADS_TOKEN", "HOWABOUTHIS_THREADS_TOKEN")
-URL = "https://graph.threads.net/refresh_access_token"
+THREADS = ("https://graph.threads.net/refresh_access_token", "th_refresh_token")
+INSTAGRAM = ("https://graph.instagram.com/refresh_access_token", "ig_refresh_token")  # 인스타 로그인 토큰(IG…)
+SECRETS = {
+    "ITEMLAB_THREADS_TOKEN": THREADS,
+    "HOWABOUTHIS_THREADS_TOKEN": THREADS,
+    "HOWABOUTHIS_IG_TOKEN": INSTAGRAM,
+}
 
 
-def refresh(token):
-    q = urllib.parse.urlencode({"grant_type": "th_refresh_token", "access_token": token})
+def refresh(token, kind):
+    url, grant = kind
+    q = urllib.parse.urlencode({"grant_type": grant, "access_token": token})
     try:
-        with urllib.request.urlopen(f"{URL}?{q}", timeout=60) as r:
+        with urllib.request.urlopen(f"{url}?{q}", timeout=60) as r:
             return json.load(r)
     except urllib.error.HTTPError as e:  # 주소에 토큰이 있어서 오류 내용만
         try:
@@ -33,13 +40,13 @@ def main():
     if not os.environ.get("GH_TOKEN"):
         sys.exit("Secret SECRETS_PAT 이 없어서 새 토큰을 저장할 수 없음 — 갱신하지 않음")
     failed = 0
-    for name in SECRETS:
+    for name, kind in SECRETS.items():
         token = os.environ.get(name)
         if not token:
             print(f"{name}: Secret 없음 — 건너뜀")
             continue
         try:
-            out = refresh(token)
+            out = refresh(token, kind)
             new = out["access_token"]
             print(f"::add-mask::{new}")
             subprocess.run(["gh", "secret", "set", name, "--repo", os.environ["GITHUB_REPOSITORY"]],

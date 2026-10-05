@@ -21,5 +21,6 @@ jobs:
         env:
           ITEMLAB_THREADS_TOKEN: ${{ secrets.ITEMLAB_THREADS_TOKEN }}
           HOWABOUTHIS_THREADS_TOKEN: ${{ secrets.HOWABOUTHIS_THREADS_TOKEN }}
+          HOWABOUTHIS_IG_TOKEN: ${{ secrets.HOWABOUTHIS_IG_TOKEN }}  # 인스타 게시 토큰도 같이 갱신
           GH_TOKEN: ${{ secrets.SECRETS_PAT }}
         run: python tools/threads/refresh_tokens.py
