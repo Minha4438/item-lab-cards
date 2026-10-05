@@ -1,0 +1,22 @@
+name: threads-autoreply
+# 아이템연구소 스레드: 제품·링크를 묻는 댓글에 "프로필 링크 확인" 답글 (tools/threads/autoreply.py)
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # 30분마다 (GitHub 사정으로 몇 분 늦을 수 있음)
+  workflow_dispatch:          # Actions 탭에서 바로 실행
+concurrency:
+  group: threads-autoreply
+  cancel-in-progress: false
+jobs:
+  reply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: 답글 달기
+        env:
+          THREADS_ACCESS_TOKEN: ${{ secrets.ITEMLAB_THREADS_TOKEN }}  # @item.lab.kr 토큰
+        run: python tools/threads/autoreply.py --live
