@@ -31,9 +31,9 @@ ASK = re.compile(
     r"어디(서|꺼|거|껀|제)|링크|구매|사고\s*싶|살래|사볼|정보\s*좀|알려\s*줘|알려\s*주")
 
 MESSAGES = [
-    "프로필 링크에 정리해뒀어{no}. 거기서 확인해줘",
-    "써본 거 프로필 링크에 모아뒀어{no}. 번호 보고 찾으면 돼",
-    "프로필 링크(리틀리)에 있어{no}. 확인해줘",
+    "제품 궁금하면 내 프로필 링크{no} 확인해줘!",
+    "내 프로필 링크{no}에 정리해뒀어. 거기서 확인해줘!",
+    "프로필 링크(리틀리){no}에 있어. 확인해줘!",
 ]
 
 
@@ -97,7 +97,7 @@ def main():
             if sent >= MAX_REPLIES:
                 continue
             no = no_map.get(post["id"])
-            msg = MESSAGES[int(r["id"]) % len(MESSAGES)].format(no=f" (No.{no})" if no else "")
+            msg = MESSAGES[int(r["id"]) % len(MESSAGES)].format(no=f" {no}번" if no else "")
             if live:
                 cid = call("POST", "me/threads", media_type="TEXT", text=msg, reply_to_id=r["id"])["id"]
                 wait_ready(cid)
