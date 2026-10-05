@@ -1,0 +1,23 @@
+name: howabouthis-threads-autoreply
+# 이거 어때?(@how.abouthis) 스레드: history.json의 스레드 게시물에 달린 모든 댓글에
+# "댓글 감사합니다! 프로필 링크에서 N번 제품 확인해주세요~!" 답글 (tools/howabouthis/threads.py reply)
+on:
+  schedule:
+    - cron: "22,52 * * * *"   # 30분마다 (정각을 피함, 다른 스레드 액션과 겹치지 않게)
+  workflow_dispatch:
+concurrency:
+  group: howabouthis-threads-autoreply
+  cancel-in-progress: false
+jobs:
+  reply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: 답글 달기
+        env:
+          THREADS_ACCESS_TOKEN: ${{ secrets.HOWABOUTHIS_THREADS_TOKEN }}  # @how.abouthis 토큰
+        run: python tools/howabouthis/threads.py reply

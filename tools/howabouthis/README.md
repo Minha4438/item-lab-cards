@@ -16,6 +16,7 @@ Claude Code 세션에서 명령어로 실행:
 | `cards.py` + `render.js` | spec.json → 1080x1350 JPG (시안 A, 넘치는 글자 자동 축소) |
 | `reel.py` | 렌더된 카드 → 슬라이드 릴스 `reel.mp4` (1080x1920) |
 | `post.py` | 게시 (`--reel`: 릴스, `--dry-run`: 게시 직전까지만) |
+| `threads.py` | 스레드 게시(`post`) · 댓글 자동 답글(`reply`) · 토큰 갱신(`refresh`) |
 | `history.json` | 게시 이력 (중복 방지) |
 | `examples/sujeo/` | 예시 spec + 사진 |
 

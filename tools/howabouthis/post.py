@@ -75,7 +75,8 @@ def main():
     caption = spec["caption"]
     if len(caption) > 2200 or caption.count("#") > 30:
         raise SystemExit("캡션은 2,200자·해시태그 30개 이하")
-    if not dry and any(h.get("id") == cid_ and h.get("format", "carousel") == fmt for h in load_json(HISTORY, [])):
+    if not dry and any(h.get("id") == cid_ and h.get("platform", "instagram") == "instagram"
+                       and h.get("format", "carousel") == fmt for h in load_json(HISTORY, [])):
         raise SystemExit(f"{cid_} ({fmt}) 는 이미 게시됨 (history.json)")
 
     quota = ig_api("me/content_publishing_limit", {"fields": "quota_usage,config"})["data"][0]

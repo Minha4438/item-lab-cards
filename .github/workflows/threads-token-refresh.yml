@@ -1,0 +1,25 @@
+name: threads-token-refresh
+# 스레드 장기 토큰(60일)을 한 달에 두 번 갱신해서 Secret을 새 토큰으로 교체 (tools/threads/refresh_tokens.py)
+# 필요: Secret SECRETS_PAT — 이 저장소만, 권한 "Secrets: Read and write"인 fine-grained 개인 토큰
+on:
+  schedule:
+    - cron: "17 18 1,15 * *"   # 매월 1·15일 03:17 KST
+  workflow_dispatch:
+concurrency:
+  group: threads-token-refresh
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: 토큰 갱신
+        env:
+          ITEMLAB_THREADS_TOKEN: ${{ secrets.ITEMLAB_THREADS_TOKEN }}
+          HOWABOUTHIS_THREADS_TOKEN: ${{ secrets.HOWABOUTHIS_THREADS_TOKEN }}
+          GH_TOKEN: ${{ secrets.SECRETS_PAT }}
+        run: python tools/threads/refresh_tokens.py
