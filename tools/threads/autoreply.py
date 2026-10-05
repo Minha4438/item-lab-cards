@@ -100,7 +100,7 @@ def main():
                 time.sleep(3)
             sent += 1
     mode = "답글 단 수" if live else "답글 달 예정 (미리보기)"
-    print(f"최근 {DAYS}일 글 {len(posts)}개 · 남이 단 댓글 {seen}개 · 제품·링크 질문 {asked}개 · 이미 답함 {done}개 · {mode} {sent}개")
+    print(f"@{me} · 최근 {DAYS}일 글 {len(posts)}개 · 남이 단 댓글 {seen}개 · 제품·링크 질문 {asked}개 · 이미 답함 {done}개 · {mode} {sent}개")
 
 
 if __name__ == "__main__":
