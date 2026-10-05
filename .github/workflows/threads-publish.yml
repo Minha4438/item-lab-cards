@@ -2,7 +2,7 @@ name: threads-publish
 # 아이템연구소 스레드 예약 게시: tools/threads/queue/의 예약 중 시간이 된 1개를 올리고 결과를 커밋 (Claude 사용량 없음)
 on:
   schedule:
-    - cron: "12,42 * * * *"   # 30분마다 (정각을 피함). GitHub 예약은 몇 분~수십 분 늦을 수 있음
+    - cron: "11,41 * * * *"   # 30분마다 (정각을 피함). GitHub 예약은 몇 분~수십 분 늦을 수 있음
   workflow_dispatch:
 concurrency:
   group: threads-publish
