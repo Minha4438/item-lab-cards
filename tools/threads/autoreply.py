@@ -3,7 +3,8 @@
   python tools/threads/autoreply.py          # 미리보기 (답글 안 닮)
   python tools/threads/autoreply.py --live   # 실제로 답글
 
-- 환경 변수 THREADS_ACCESS_TOKEN (GitHub Actions에서는 저장소 Secret)
+- 환경 변수 THREADS_ACCESS_TOKEN (GitHub Actions에서는 저장소 Secret ITEMLAB_THREADS_TOKEN — 이 저장소는 다른 계정과 같이 쓰므로 이름을 구분)
+- 토큰 계정이 @item.lab.kr이 아니면 아무것도 하지 않는다
 - "댓글 달면 링크 줄게" 같은 유도는 하지 않는다 (Meta 참여 낚시 정책). 스스로 물어본 댓글에만 답한다
 - 이미 우리 계정이 답한 댓글은 건너뛴다 (기록 파일 없이 매번 API로 확인)
 - 공개 저장소의 Actions 기록은 누구나 볼 수 있으므로 댓글 내용·아이디·토큰은 출력하지 않고 개수만 출력한다
@@ -22,6 +23,7 @@ from pathlib import Path
 API = "https://graph.threads.net/v1.0"
 DAYS = 14          # 최근 며칠 동안 올린 글의 댓글만 본다
 MAX_REPLIES = 20   # 한 번 돌 때 최대 답글 수
+EXPECTED = "item.lab.kr"  # 이 계정 토큰일 때만 동작
 NO_MAP = Path(__file__).with_name("no_map.json")  # 게시물 id → 세트 번호 (있으면 답글에 No. 표시)
 
 ASK = re.compile(
@@ -65,10 +67,13 @@ def wait_ready(cid):
 
 def main():
     if not os.environ.get("THREADS_ACCESS_TOKEN"):
-        print("THREADS_ACCESS_TOKEN이 없어서 건너뜀 (저장소 Settings → Secrets → Actions에 추가)")
+        print("토큰이 없어서 건너뜀 (저장소 Settings → Secrets → Actions에 ITEMLAB_THREADS_TOKEN 추가)")
         return
     live = "--live" in sys.argv
     me = call("GET", "me", fields="id,username")["username"]
+    if me != EXPECTED:
+        print(f"토큰 계정이 @{me} — @{EXPECTED} 토큰이 아니라서 건너뜀 (ITEMLAB_THREADS_TOKEN 값 확인)")
+        return
     since = datetime.now(timezone.utc) - timedelta(days=DAYS)
     no_map = json.loads(NO_MAP.read_text(encoding="utf-8")) if NO_MAP.exists() else {}
 
