@@ -9,5 +9,7 @@
   ],
   "reply": null,
   "no": "3",
-  "status": "pending"
+  "status": "pending",
+  "last_error": "2026-10-06T17:54+09:00 API 오류 400: The media with id 18115093480975120 cannot be found.",
+  "tries": 1
 }
