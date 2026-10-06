@@ -31,6 +31,7 @@ CSS = """
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:1080px;height:1350px;overflow:hidden;font-family:'Pretendard','Noto Color Emoji',sans-serif;letter-spacing:-0.02em;word-break:keep-all;background:#222}
 .bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat}
+.bg.blur{filter:blur(36px);transform:scale(1.15)}
 .ad{position:absolute;top:44px;right:48px;font-size:26px;font-weight:600;color:#fff;background:rgba(0,0,0,.38);padding:6px 14px;border-radius:10px}
 .grad{position:absolute;left:0;right:0;bottom:0;height:62%;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.55) 55%,rgba(0,0,0,.8) 100%)}
 .tag{position:absolute;left:64px;top:48px;display:flex;align-items:center;gap:10px;background:#FFE14D;color:#161616;font-weight:800;font-size:30px;padding:10px 22px 10px 12px;border-radius:999px;transform:rotate(-3deg);box-shadow:0 6px 18px rgba(0,0,0,.18)}
@@ -88,11 +89,26 @@ def bg(img, base):
         raise SystemExit(f"이미지 없음: {src}")
     pos = img.get("pos", "center")
     size = f"{int(img['zoom'] * 100)}% auto" if img.get("zoom") else "cover"
-    return f'<div class="bg" style="background-image:url(\'{pathlib.Path(src).as_uri()}\');background-position:{pos};background-size:{size}"></div>'
+    url = pathlib.Path(src).as_uri()
+    main = f'<div class="bg" style="background-image:url(\'{url}\');background-position:{pos};background-size:{size}"></div>'
+    if img.get("zoom", 1) < 1:  # 축소하면 남는 여백을 같은 사진을 흐리게 깔아 채운다 (제품을 피해 말풍선 자리를 만들 때)
+        return f'<div class="bg blur" style="background-image:url(\'{url}\')"></div>' + main
+    return main
+
+
+def local_fonts():
+    """work/fonts/Pretendard-*.otf 가 있으면 @font-face로 직접 로드 (윈도우에 폰트를 설치하지 않아도 됨)."""
+    weights = {"Regular": 400, "Medium": 500, "SemiBold": 600, "Bold": 700, "ExtraBold": 800, "Black": 900}
+    rules = []
+    for name, w in weights.items():
+        f = os.path.join(os.path.dirname(os.path.dirname(TOOL_DIR)), "work", "fonts", f"Pretendard-{name}.otf")
+        if os.path.exists(f):
+            rules.append(f"@font-face{{font-family:'Pretendard';font-weight:{w};src:url('{pathlib.Path(f).as_uri()}')}}")
+    return "".join(rules)
 
 
 def page(body):
-    return f"<!doctype html><html><head><meta charset=utf-8><style>{CSS}</style></head><body>{body}{FIT_JS}</body></html>"
+    return f"<!doctype html><html><head><meta charset=utf-8><style>{local_fonts()}{CSS}</style></head><body>{body}{FIT_JS}</body></html>"
 
 
 def build(spec, base):
@@ -111,14 +127,17 @@ def build(spec, base):
 
     for i, s in enumerate(spec["slides"], 2):
         where = s.get("bubble", "bottom")
+        # bubble_top: 말풍선 윗변 y(px) 직접 지정, bubble_width: 최소 폭(px) — 사진 속 얼굴·글자 등을 정확히 가릴 때
+        pos = f"top:{s['bubble_top']}px;bottom:auto" if s.get("bubble_top") is not None else ""
+        minw = f"min-width:{s['bubble_width']}px" if s.get("bubble_width") else ""
         pages.append(page(f"""{bg(s['image'], base)}<div class="shade {where}"></div>{ad}
-<div class="chat {where}"><div class="av">{logo(60)}</div><div class="bub"><div class="b1" data-fit="760"><span>{esc(s['bold'])}</span></div>
+<div class="chat {where}" style="{pos}"><div class="av">{logo(60)}</div><div class="bub" style="{minw}"><div class="b1" data-fit="760"><span>{esc(s['bold'])}</span></div>
 <div class="b2">{esc(s.get('text'))}</div></div></div>{pg(i)}"""))
 
     t = spec.get("cta", {})
     kw = spec["keyword"]
-    big = t.get("big", "제품 정보 궁금하면\n댓글 한 줄이면 끝").split("\n")
-    note = t.get("note", f"댓글에 <b>‘{html.escape(kw)}’</b> 남기면 DM으로 바로 보내드려요<br>DM이 안 보이면 요청함도 확인해주세요 🙌")
+    big = t.get("big", "궁금하면 댓글 남기기\n정보는 DM으로").split("\n")
+    note = t.get("note", "DM이 안 보이면 요청함도 확인해주세요 🙌")
     pages.append(page(f"""{bg(t.get('image') or spec['cover']['image'], base)}<div class="dim"></div>{tag}{ad}
 <div class="cta"><div class="q">{esc(t.get('q', '그래서, 이거 어때요? 🤔'))}</div><div class="big">{''.join(f'<div data-fit="952">{esc(b)}</div>' for b in big)}</div></div>
 <div class="input"><div class="av" style="width:78px;height:78px">{logo(54)}</div><div class="txt">{esc(kw)}<i></i></div><div class="send">게시</div></div>
