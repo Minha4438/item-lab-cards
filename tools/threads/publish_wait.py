@@ -102,14 +102,16 @@ def main():
             if pending():
                 dispatch()
             return
-        time.sleep(wait)
+        time.sleep(wait + 3)  # 시계 오차로 1~2초 일찍 깨어나도 시간이 된 뒤에 확인
         r = subprocess.run([sys.executable, "tools/threads/publish_queue.py", "--live"], cwd=ROOT, env=os.environ)
         commit_push()
-        if r.returncode == 0:
-            last_post = time.time()
-        else:
+        if r.returncode != 0:
             say("게시 실패 — 5분 뒤 다시 시도")
             time.sleep(RETRY_WAIT)
+        elif len(pending()) < len(jobs) or any(k != key for _, k in pending()[:1]):
+            last_post = time.time()  # 게시되어 이번 예약이 끝남
+        else:
+            time.sleep(20)  # 게시된 게 없으면(시각 직전) 잠깐 뒤 다시 확인
     sync()
     if pending():
         dispatch()
