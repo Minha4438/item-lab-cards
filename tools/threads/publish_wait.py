@@ -103,6 +103,7 @@ def main():
                 dispatch()
             return
         time.sleep(wait + 3)  # 시계 오차로 1~2초 일찍 깨어나도 시간이 된 뒤에 확인
+        sync()  # 기다리는 동안 예약이 취소·수정됐을 수 있으니 최신 파일로 게시
         r = subprocess.run([sys.executable, "tools/threads/publish_queue.py", "--live"], cwd=ROOT, env=os.environ)
         commit_push()
         if r.returncode != 0:
