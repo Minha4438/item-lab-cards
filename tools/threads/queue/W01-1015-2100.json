@@ -6,7 +6,10 @@
   "images": [],
   "reply": null,
   "no": null,
-  "status": "pending",
+  "status": "done",
   "last_error": "2026-10-15T21:00+09:00 API 오류 400: The media with id 18117163858975120 cannot be found.",
-  "tries": 1
+  "tries": 1,
+  "id": "18009235970786664",
+  "permalink": "https://www.threads.com/@item.lab.kr/post/Deg6tZlGzO2",
+  "published_at": "2026-10-15T21:05+09:00"
 }
