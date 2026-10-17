@@ -43,7 +43,9 @@ def clean_code(raw):
 
 
 def need(name):
-    v = os.environ.get(name, "").strip()
+    raw = os.environ.get(name, "")
+    print(f"{name}: 받은 글자 수 {len(raw)}" + (" (공백뿐)" if raw and not raw.strip() else ""))
+    v = raw.strip()
     if not v:
         names()
         sys.exit(f"Secret {name} 이 비어 있음 — 코드를 쓰기 전에 멈춤")
@@ -60,6 +62,9 @@ def names():
 
 
 def main():
+    r = subprocess.run(["gh", "api", f"repos/{os.environ['GITHUB_REPOSITORY']}/actions/secrets/public-key", "--jq", ".key_id"],
+                       capture_output=True, text=True)
+    print("SECRETS_PAT 로 Secret 접근:", "OK" if r.returncode == 0 else "막힘 — 토큰 권한에 Secrets 읽기·쓰기가 없거나 이 저장소가 선택 안 됨")
     app_id, secret, pat = need("THREADS_APP_ID"), need("THREADS_APP_SECRET"), need("GH_TOKEN")
     code = clean_code(need("THREADS_AUTH_CODE"))
     print(f"::add-mask::{code}")
