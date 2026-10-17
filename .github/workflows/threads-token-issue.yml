@@ -1,0 +1,21 @@
+name: threads-token-issue
+# 인증 코드(1회용)로 스레드 장기 토큰을 발급해 Secret ITEMLAB_THREADS_TOKEN 을 교체 (tools/threads/issue_token.py)
+# 필요 Secret: THREADS_APP_ID, THREADS_APP_SECRET, THREADS_AUTH_CODE, SECRETS_PAT(이 저장소만, Secrets 읽기·쓰기)
+on:
+  workflow_dispatch:
+jobs:
+  issue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: 토큰 발급
+        env:
+          THREADS_APP_ID: ${{ secrets.THREADS_APP_ID }}
+          THREADS_APP_SECRET: ${{ secrets.THREADS_APP_SECRET }}
+          THREADS_AUTH_CODE: ${{ secrets.THREADS_AUTH_CODE }}
+          GH_TOKEN: ${{ secrets.SECRETS_PAT }}
+        run: python tools/threads/issue_token.py
