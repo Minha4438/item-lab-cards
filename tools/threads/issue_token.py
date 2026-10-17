@@ -45,8 +45,18 @@ def clean_code(raw):
 def need(name):
     v = os.environ.get(name, "").strip()
     if not v:
+        names()
         sys.exit(f"Secret {name} 이 비어 있음 — 코드를 쓰기 전에 멈춤")
     return v
+
+
+def names():
+    """저장소에 실제로 있는 Secret·Variable '이름'만 출력(값은 안 나옴). 철자·저장 위치 확인용"""
+    for kind, label in (("secret", "Repository secrets"), ("variable", "Variables")):
+        r = subprocess.run(["gh", kind, "list", "--repo", os.environ["GITHUB_REPOSITORY"], "--json", "name", "-q", ".[].name"],
+                           capture_output=True, text=True)
+        found = [n for n in r.stdout.split("\n") if n]
+        print(f"{label} 이름 목록: {[repr(n) for n in found] if r.returncode == 0 else '조회 실패 ' + r.stderr.strip()[-120:]}")
 
 
 def main():
