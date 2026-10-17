@@ -1,0 +1,30 @@
+name: threads-research
+# 스레드 공개 글·계정 탐색 (tools/threads/research.py). 결과는 실행 로그에 요약만 출력
+on:
+  workflow_dispatch:
+    inputs:
+      queries:
+        description: "검색어 (쉼표로 구분)"
+        default: "야식,야식 레시피,라면 레시피,편의점 야식"
+      usernames:
+        description: "계정 아이디 (쉼표로 구분, 선택)"
+        default: ""
+      search_type:
+        description: "TOP 또는 RECENT"
+        default: "TOP"
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: 탐색
+        env:
+          THREADS_ACCESS_TOKEN: ${{ secrets.ITEMLAB_THREADS_TOKEN }}
+          QUERIES: ${{ inputs.queries }}
+          USERNAMES: ${{ inputs.usernames }}
+          SEARCH_TYPE: ${{ inputs.search_type }}
+        run: python tools/threads/research.py
